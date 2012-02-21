@@ -70,7 +70,7 @@
           <p><a class="btn" href="#">Compute! &raquo;</a></p>
         </div>
       </div>
-<!--Test-->
+
       <hr>
 
       <footer>
