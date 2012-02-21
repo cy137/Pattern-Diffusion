@@ -47,14 +47,12 @@
 
     <div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>Hello, world!</h1>
         <p>Welcome to Team Celadon's Senior Project.  This utility serves to provide a means to gather and analyze data on Twitter in order to find demographic information based on clusters of users.</p>
         <p><a class="btn btn-primary btn-large" href="#about">Learn more &raquo;</a></p>
       </div>
 
-      <!-- Example row of columns -->
       <div class="row">
         <div class="span4">
           <h2>Gather Data</h2>
@@ -72,7 +70,7 @@
           <p><a class="btn" href="#">Compute! &raquo;</a></p>
         </div>
       </div>
-
+<!--Test-->
       <hr>
 
       <footer>
