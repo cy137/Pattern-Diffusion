@@ -30,8 +30,8 @@
         </div>
         <div class="span4">
           <h2>Visualize Data</h2>
-           <p>Click this link to see the data you've gathered.</p>
-          <p><a class="btn" href="#">Visualize! &raquo;</a></p>
+           <p>Click this link to check out the digit example with matlab integration.</p>
+          <p><a class="btn" href="digitexample.php">Visualize! &raquo;</a></p>
        </div>
         <div class="span4">
           <h2>View Results</h2>

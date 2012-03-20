@@ -25,11 +25,14 @@
 		{
 			console.log({"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()});
 			$.post("login.php",{"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()},function(data){
-				console.log(data);
 				if(data == "true")
 					window.location = "http://www.teamceladon.com:22222";
 				else
+				{
 					errorMsg = "  There was an error submitting your information.  Please review and resubmit.";
+					$('#loginErrorTxt').html(errorMsg);
+					$('#loginError').show();
+				}
 			});
 		}
 		else

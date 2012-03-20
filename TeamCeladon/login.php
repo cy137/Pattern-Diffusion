@@ -5,7 +5,7 @@ $pass = $_POST["password"];
 if(!($userID == "" || $pass == ""))
 {
 	$mysqli = new mysqli("76.189.182.27:3306","user","tweetmysql","teamceladon");
-	$result = $mysqli->query("select UserID from Users where UserID = '{$userID}'");
+	$result = $mysqli->query("select UserID from Users where UserID = '{$userID}' AND Password = '{$pass}'");
 	if($result->num_rows > 0)
 	{
 		session_start();
