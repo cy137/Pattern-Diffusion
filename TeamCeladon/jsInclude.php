@@ -12,7 +12,11 @@
 <script src="./assets/js/bootstrap-carousel.js"></script>
 <script src="./assets/js/bootstrap-typeahead.js"></script>
 
+<script src="./js/twitter.js"></script>
 <script type="text/javascript">
+
+	var resultSet = {};
+	
 	function LoginButton_Click()
 	{
 		var errorMsg = "";
@@ -26,7 +30,7 @@
 			console.log({"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()});
 			$.post("login.php",{"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()},function(data){
 				if(data == "true")
-					window.location = "http://www.teamceladon.com:22222";
+					window.location = "http://www.teamceladon.com:22222/workspace.php";
 				else
 				{
 					errorMsg = "  There was an error submitting your information.  Please review and resubmit.";
@@ -77,4 +81,19 @@
 				window.location = "http://www.teamceladon.com:22222";
 		});
 	}
+	
+	function UpdateContent(navAction,detail)
+	{
+		$.post("actionRouter.php",{"navAction":navAction,"detail":detail},function(data){
+				$('#wrapper').html(data);
+		});
+	}
+	
+	$(document).ready(function(){
+		$("ul.nav-list li:not(.nav-header)").on("click",function(event){
+			$("ul.nav-list li:not(.nav-header).active").removeClass("active");
+			$(this).addClass("active");
+			UpdateContent($(this).attr("navAction"),$(this).attr("detail"));
+		});
+	});	
 </script>
