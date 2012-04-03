@@ -13,23 +13,29 @@ function hideProcessingOverlay()
 
 var resultArray = {};
 
+function CreateUserAdjacencyGraphCallback(userID)
+{
+	return function(data){
+		resultArray[userID] = data.ids.slice(0);
+	}
+}
+
 function GetUserAdjacencyGraph()
 {
+	var count = 0;
 	var duplicateCount = 0;
-	for(var i = 0; i < resultSet.rawData.length; i++)
+	for(var i = 0; i < resultSet.rawData.length && count < 70; i++)
 	{
-		for(var j = 0; j < resultSet.rawData[i].results.length; j++)
+		for(var j = 0; j < resultSet.rawData[i].results.length && count < 70; j++)
 		{
 			var tweet = resultSet.rawData[i].results[j];
 			var userID = tweet.from_user_id;
 			$.ajax({
-				url: 'https://api.twitter.com/1/followers/ids.json?cursor=5000&stringify_ids=true&user_id='+userID,
+				url: 'https://api.twitter.com/1/followers/ids.json?cursor=-1&user_id='+userID,
 				dataType: 'jsonp',
-				success: function(tweetData)	
-				{
-					resultArray[userID] = tweetData.ids;
-				}
+				success:CreateUserAdjacencyGraphCallback(userID)
 			});
+			count++;
 		}
 	}
 }
@@ -101,7 +107,7 @@ function SubmitQuery()
 		$.when.apply($,def).done(function(){
 			resultSet.rawData = returnedData.slice(0);
 			SaveResultSetToSession();
-			//GetUserAdjacencyGraph();
+			GetUserAdjacencyGraph();
 			hideProcessingOverlay();
 		});
 	});
