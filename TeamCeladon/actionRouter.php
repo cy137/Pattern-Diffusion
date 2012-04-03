@@ -26,7 +26,7 @@ switch($action)
 				include("PCAParser.php");
 				break;
 			case "PatternDiffusion":
-				include("notfound.php");
+				include("PatternDiffusionParser.php");
 				break;
 		}
 		break;

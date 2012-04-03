@@ -105,7 +105,7 @@ fclose($handle);
 
 $inputDir = "C:\Websites\TeamCeladon\Results";
 $outputDir = "C:\Websites\TeamCeladon\Results";
-$command = "matlab -wait -sd {$inputDir} -r PatternDiffusion('{$resultSet->id}')";
+$command = "matlab -wait -sd {$inputDir} -r PatternDiffusion('{$resultSet->id}',10.0,1.0,2)";
 exec($command);
 echo("Your data has been successfully processed using the Pattern Diffusion method.");
 
