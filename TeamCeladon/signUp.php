@@ -8,10 +8,10 @@ if(!($userID == "" || $pass != $passConfirm || $pass == "" || $passphrase != "tw
 {
 	//success
 	$mysqli = new mysqli("76.189.182.27:3306","user","tweetmysql","teamceladon");
-	$mysqli->query("CALL insertNewUser('{$userID}','{$pass}')");
+	$mysqli->query("insert into Users (UserID, Password) VALUES ('{$userID}','{$pass}');");
 	session_start();
-	$_SESSION["userID"]=$userID;
-	echo("true");
+	$_SESSION["userID"]=$mysqli->insert_id;
+	echo($mysqli->insert_id);
 }
 else
 	echo("false");

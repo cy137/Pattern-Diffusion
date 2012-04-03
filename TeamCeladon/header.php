@@ -15,10 +15,11 @@
 				<?php
 				session_start();
 				if(isset($_SESSION['userID']))
-					echo "<li><a id='LogoutButton' onclick='LogoutButton_Click()'>Logout</a></li>";
+					echo "<!--<li><a id='SaveResults' onclick='SaveResultsButton_Click()'>Save Results</a></li>-->
+							<li><a id='LogoutButton' onclick='LogoutButton_Click()'>Logout</a></li>";
 				else
-				echo "<li><a id='loginButton' href='#loginModal' data-toggle='modal'>Login</a></li>
-						<li><a id='signUpButton' href='#signUpModal' data-toggle='modal'>Sign up</a></li>";
+				echo "<li><a id='loginButton' href='#loginModal' data-toggle='modal' onclick='OpenLoginModal_Click()'>Login</a></li>
+						<li><a id='signUpButton' href='#signUpModal' data-toggle='modal'onclick='OpenSignUpModal_Click()'>Sign up</a></li>";
 				?>
  			</ul>
            </div><!--/.nav-collapse -->

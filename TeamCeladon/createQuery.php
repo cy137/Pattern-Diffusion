@@ -48,5 +48,5 @@ else
 	$resultSet->query = $query;
 	$_SESSION["ResultSet"]=$resultSet;
 }
-echo json_encode($resultSet);
+echo(json_encode($resultSet));
 ?>

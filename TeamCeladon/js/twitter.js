@@ -1,9 +1,43 @@
+function showProcessingOverlay()
+{
+	$("#processingOverlay").modal({
+		keyboard: false,
+		backdrop: 'static'
+	});
+}
+
+function hideProcessingOverlay()
+{
+	$("#processingOverlay").modal('hide');
+}
+
+var resultArray = {};
+
+function GetUserAdjacencyGraph()
+{
+	var duplicateCount = 0;
+	for(var i = 0; i < resultSet.rawData.length; i++)
+	{
+		for(var j = 0; j < resultSet.rawData[i].results.length; j++)
+		{
+			var tweet = resultSet.rawData[i].results[j];
+			var userID = tweet.from_user_id;
+			$.ajax({
+				url: 'https://api.twitter.com/1/followers/ids.json?cursor=5000&stringify_ids=true&user_id='+userID,
+				dataType: 'jsonp',
+				success: function(tweetData)	
+				{
+					resultArray[userID] = tweetData.ids;
+				}
+			});
+		}
+	}
+}
+
 function SubmitQuery()
 {
-	$.ajax({url:"createQuery.php",
-		async: false,
-		type: "POST",
-		data:
+	showProcessingOverlay();
+	$.post("createQuery.php",
 		{
 			"q":"",
 			"callback":"",
@@ -28,19 +62,23 @@ function SubmitQuery()
 			"hasURL":$("#hasURL").val(),
 			"source":$("#source").val(),
 			"customFilter":$("#customFilter").val()
-		}
-	},
+		},
 	function(data){
+		//LoadResultSetFromSession();
 		resultSet = $.parseJSON(data);
 		var queryPT1 = 'http://search.twitter.com/search.json?page=';
 		var queryPT2 = resultSet.query.queryString;
 		var query;
 		var returnedData = new Array();
-		//var ajaxQueue = $({});
+		var def = new Array();
+		for(var i = 0; i < parseInt(resultSet.query.pages); i++){
+			def.push($.Deferred());
+		}
+		
+		
 		for(var i = 1; i <= parseInt(resultSet.query.pages); i++)
 		{
 			query = queryPT1 + i + queryPT2;
-			//ajaxQueue.queue(function(){
 			$.ajax({
 				url: query,
 				dataType: 'jsonp',
@@ -48,62 +86,23 @@ function SubmitQuery()
 				success: function(tweetData)	
 				{
 					returnedData.push(tweetData);
-					console.log(returnedData);
-				}
-			});
-				//ajaxQueue.dequeue();
-			//});
-		}
-		//ajaxQueue.queue(function(){
-		resultSet.rawData = returnedData.slice(0);
-		
-		//console.log(resultSet);
-		//console.log(output);
-		//console.log(JSON.stringify(returnedData));
-		//$.post("saveRawDataToSession.php",
-		//{
-		//	"rawData": JSON.stringify(returnedData)
-		//},function(data2){console.log(data2)});
-		//	});
-		//ajaxQueue.dequeue();
-		
-	});
-}
-
-function queryTwitter()
-{
-	var queryPT1 = 'http://search.twitter.com/search.json?page=';
-	var queryPT2 = '&q=democrat&rpp=100&include_entities=true';
-	var query;
-		
-	var ajaxQueue = $({});
-	for(var i = 1; i <= 10; i++)
-	{
-		query = queryPT1 + i + queryPT2;
-		
-		ajaxQueue.queue(function()
-			{
-			$.ajax({
-				url: query,
-				dataType: 'jsonp',
-				async: false,
-				success: function(data)
-				{
-					var dataString = "";
-					for(var j = 0; j < data.results.length; j++)
+					var isResolved = false;
+					for(var j = 0; j < def.length && !isResolved; j++)
 					{
-						dataString += data.results[j].text + "|||";
-						$(".content").append(data.results[j].text + "<br>");
+						if(def[j].state() == "pending")
+						{
+							def[j].resolve();
+							isResolved = true;
+						}
 					}
-					$.ajax({
-							url: "writedatatofile.php",
-							type: 'POST',
-							data: 'data=' + dataString + '&filename=democrat.txt'
-						});
 				}
 			});
-			ajaxQueue.dequeue();
+		}
+		$.when.apply($,def).done(function(){
+			resultSet.rawData = returnedData.slice(0);
+			SaveResultSetToSession();
+			//GetUserAdjacencyGraph();
+			hideProcessingOverlay();
 		});
-	}
-	ajaxQueue.dequeue();
+	});
 }

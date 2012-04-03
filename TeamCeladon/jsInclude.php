@@ -17,6 +17,37 @@
 
 	var resultSet = {};
 	
+	function SaveResultsButton_Click()
+	{
+		showProcessingOverlay();
+		$.when(SaveResultSetToSession()).then(function(){
+			$.post("SaveResultSetToDatabase.php",
+			{},
+			function(data){
+				hideProcessingOverlay();
+			});
+		});
+	}
+	
+	function LoadResultSetFromSession()
+	{
+		$.post("LoadResultSetFromSession.php",
+			{},
+			function(data){
+				if(data != ""){
+					resultSet = $.parseJSON(data);
+				}
+			});
+	}
+	
+	function SaveResultSetToSession()
+	{
+		$.post("SaveResultSetToSession.php",
+		{
+			"data": JSON.stringify(resultSet)
+		});
+	}
+	
 	function LoginButton_Click()
 	{
 		var errorMsg = "";
@@ -27,9 +58,9 @@
 		
 		if(errorMsg == "")
 		{
-			console.log({"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()});
 			$.post("login.php",{"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()},function(data){
-				if(data == "true")
+				console.log(data);
+				if(data != "false")
 					window.location = "http://www.teamceladon.com:22222/workspace.php";
 				else
 				{
@@ -45,6 +76,16 @@
 			$('#loginError').show();
 		}
 	}
+	
+	function OpenSignUpModal_Click()
+	{
+		$('#userNameSignUp').focus();
+	}
+	
+	function OpenLoginModal_Click()
+	{
+		$('#userNameLogin').focus();
+	}
 
 	function SignUpButton_Click()
 	{
@@ -59,8 +100,10 @@
 		if(errorMsg == "")
 		{
 			$.post("signUp.php",{"userID":$('#userNameSignUp').val(),"password":$('#passwordSignUp').val(), "passwordConfirm":$('#passwordConfirmSignUp').val(),"passphrase":$('#passphraseSignUp').val()},function(data){
-				if(data == "true")
+				if(data != "false")
+				{
 					window.location = "http://www.teamceladon.com:22222";
+				}
 				else
 					errorMsg = "  There was an error submitting your information.  Please review and resubmit.";
 			});
@@ -82,18 +125,24 @@
 		});
 	}
 	
-	function UpdateContent(navAction,detail)
+	function UpdateContent(navAction,detail,type)
 	{
-		$.post("actionRouter.php",{"navAction":navAction,"detail":detail},function(data){
+		if(type == null || type == undefined)
+			type = "";
+		$.post("actionRouter.php",{"navAction":navAction,"detail":detail,"type":type},function(data){
 				$('#wrapper').html(data);
+				hideProcessingOverlay();
 		});
 	}
 	
 	$(document).ready(function(){
 		$("ul.nav-list li:not(.nav-header)").on("click",function(event){
+			showProcessingOverlay();
 			$("ul.nav-list li:not(.nav-header).active").removeClass("active");
 			$(this).addClass("active");
-			UpdateContent($(this).attr("navAction"),$(this).attr("detail"));
+			if($(this).attr("navAction")=="parseprocess")
+				$(".visualizeresults").attr("type",$(this).attr("detail"));
+			UpdateContent($(this).attr("navAction"),$(this).attr("detail"),$(this).attr("type"));
 		});
 	});	
 </script>

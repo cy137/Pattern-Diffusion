@@ -1,21 +1,29 @@
-
+<?php
+	session_start();
+	if(!isset($_SESSION['userID']))
+		header("Location:index.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Team Celadon</title>
-	<?php
-	require_once("headerInclude.php");
-	session_start();
-	if(!isset($_SESSION['userID']))
-		header("Location:index.php");
-	?>
+    <title>Team Celadon</title>	
   </head>
   <body>
 
     <?php 
+	require_once("headerInclude.php");
 	require_once("header.php");
 	?>
+	
+	<div class="modal fade" id="processingOverlay">
+		<div class="modal-header">
+			<h3>Loading ...</h3>
+		</div>
+		<div class="modal-body">
+			<p>Please wait while your request is processed.</p>
+		</div>  
+	</div>
 
     <div class="container-fluid">
       <div class="row-fluid">
@@ -25,13 +33,13 @@
               <li class="nav-header">1.  Gather</li>
               <li navAction="gather" detail="All" class="active"><a href="#">Twitter Data</a></li>
               <li class="nav-header">2.  Parse and Process</li>
-              <li navAction="parseprocess" detail="HITS"><a href="#">HITS</a></li>
-              <li navAction="parseprocess" detail="PageRank"><a href="#">PageRank</a></li>
-              <li navAction="parseprocess" detail="KMeans"><a href="#">KMeans</a></li>
+              <!--<li navAction="parseprocess" detail="HITS"><a href="#">HITS</a></li>
+              <li navAction="parseprocess" detail="PageRank"><a href="#">PageRank</a></li>-->
+              <li navAction="parseprocess" detail="PCA"><a href="#">PCA</a></li>
               <li navAction="parseprocess" detail="PatternDiffusion"><a href="#">Pattern Diffusion</a></li>
               <li class="nav-header">3.  Results</li>
-              <li navAction="visualizeresults" detail="NumericData"><a href="#">Numeric Data</a></li>
-              <li navAction="visualizeresults" detail="Graphs"><a href="#">Graphs</a></li>
+              <li class="visualizeresults" navAction="visualizeresults" detail="NumericData" type=""><a href="#">Numeric Data</a></li>
+              <li class="visualizeresults" navAction="visualizeresults" detail="Graphs" type=""><a href="#">Graphs</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -48,6 +56,11 @@
 	  <?php
 	  require_once("jsInclude.php");
 	  ?>
+	  <script type="text/javascript">
+		$(document).ready(function(){
+			LoadResultSetFromSession();
+		});
+	</script>
 
     </div>
 

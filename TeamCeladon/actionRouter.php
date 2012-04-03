@@ -1,6 +1,7 @@
 <?php
 $action = $_POST["navAction"];
 $detail = $_POST["detail"];
+$type = $_POST["type"];
 
 switch($action)
 {
@@ -21,8 +22,8 @@ switch($action)
 			case "PageRank":
 				include("notfound.php");
 				break;
-			case "KMeans":
-				include("notfound.php");
+			case "PCA":
+				include("PCAParser.php");
 				break;
 			case "PatternDiffusion":
 				include("notfound.php");
@@ -33,10 +34,16 @@ switch($action)
 		switch($detail)
 		{
 			case "NumericData":
-				include("notfound.php");
+				if($type == "")
+					include("notfound.php");
+				else
+					include($type."NumericData.php");
 				break;
 			case "Graphs":
-				include("notfound.php");
+				if($type == "")
+					include("notfound.php");
+				else
+					include($type."Graphs.php");
 				break;
 		}
 		break;

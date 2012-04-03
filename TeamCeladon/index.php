@@ -1,4 +1,8 @@
-
+<?php
+	session_start();
+	if(isset($_SESSION["userID"]))
+		header("Location:./workspace.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -49,7 +53,6 @@
 	  <?php
 	  require_once("jsInclude.php");
 	  ?>
-
     </div>
 
   </body>
