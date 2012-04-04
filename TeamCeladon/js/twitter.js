@@ -11,33 +11,61 @@ function hideProcessingOverlay()
 	$("#processingOverlay").modal('hide');
 }
 
-var resultArray = {};
-
 function CreateUserAdjacencyGraphCallback(userID)
 {
 	return function(data){
-		resultArray[userID] = data.ids.slice(0);
+		resultSet.userAdjacencyGraph[userID] = data.ids.slice(0);
+		var isResolved = false;
+		for(var j = 0; j < uagDef.length && !isResolved; j++)
+		{
+			if(uagDef[j].state() == "pending")
+			{
+				uagDef[j].resolve();
+				isResolved = true;
+			}
+		}
 	}
 }
 
+var uagDef;
 function GetUserAdjacencyGraph()
 {
-	var count = 0;
-	var duplicateCount = 0;
-	for(var i = 0; i < resultSet.rawData.length && count < 70; i++)
-	{
-		for(var j = 0; j < resultSet.rawData[i].results.length && count < 70; j++)
-		{
-			var tweet = resultSet.rawData[i].results[j];
-			var userID = tweet.from_user_id;
-			$.ajax({
-				url: 'https://api.twitter.com/1/followers/ids.json?cursor=-1&user_id='+userID,
-				dataType: 'jsonp',
-				success:CreateUserAdjacencyGraphCallback(userID)
-			});
-			count++;
-		}
+	var sampleSize = 40;
+	resultSet.userAdjacencyGraph = {};
+	uagDef = new Array();
+	for(var i = 0; i < sampleSize; i++){
+		uagDef.push($.Deferred());
 	}
+	
+	$.ajax({
+		url: 'https://api.twitter.com/1/account/rate_limit_status.json',
+		dataType: 'jsonp',
+		success: function(data){
+			if(data.remaining_hits > sampleSize)
+			{
+				var count = 0;
+				var duplicateCount = 0;
+				for(var i = 0; i < resultSet.rawData.length && count < sampleSize; i++)
+				{
+					for(var j = 0; j < resultSet.rawData[i].results.length && count < sampleSize; j++)
+					{
+						var tweet = resultSet.rawData[i].results[j];
+						var userID = tweet.from_user_id;
+						$.ajax({
+							url: 'https://api.twitter.com/1/followers/ids.json?cursor=-1&user_id='+userID,
+							dataType: 'jsonp',
+							success:CreateUserAdjacencyGraphCallback(userID)
+						});
+						count++;
+					}
+				}
+			}
+		}
+	})
+	
+	$.when.apply($,uagDef).done(function(){
+		$.post("SaveUserAdjacencyGraph.php",{"userAdjacencyGraph":JSON.stringify(resultSet.userAdjacencyGraph)});
+	});
 }
 
 function SubmitQuery()
@@ -80,7 +108,6 @@ function SubmitQuery()
 		for(var i = 0; i < parseInt(resultSet.query.pages); i++){
 			def.push($.Deferred());
 		}
-		
 		
 		for(var i = 1; i <= parseInt(resultSet.query.pages); i++)
 		{

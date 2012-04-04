@@ -20,13 +20,13 @@
 	function SaveResultsButton_Click()
 	{
 		showProcessingOverlay();
-		$.when(SaveResultSetToSession()).then(function(){
-			$.post("SaveResultSetToDatabase.php",
+		$.post("SaveResultSetToDatabase.php",
 			{},
 			function(data){
+				console.log(data);
 				hideProcessingOverlay();
-			});
-		});
+				}
+		);
 	}
 	
 	function LoadResultSetFromSession()
@@ -59,7 +59,6 @@
 		if(errorMsg == "")
 		{
 			$.post("login.php",{"userID":$('#userNameLogin').val(),"password":$('#passwordLogin').val()},function(data){
-				console.log(data);
 				if(data != "false")
 					window.location = "http://www.teamceladon.com:22222/workspace.php";
 				else

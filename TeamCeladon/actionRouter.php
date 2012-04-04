@@ -17,10 +17,10 @@ switch($action)
 		switch($detail)
 		{
 			case "HITS":
-				include("notfound.php");
+				include("HITSParser.php");
 				break;
 			case "PageRank":
-				include("notfound.php");
+				include("PageRankParser.php");
 				break;
 			case "PCA":
 				include("PCAParser.php");

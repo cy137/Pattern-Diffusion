@@ -20,7 +20,8 @@ else
     U = U./(U(:,1)*ones(1,size(U,1)));
 end;
 Y = U(:,2:d+1);
-%figure(1)
-%
-%saveas(image1,strcat(ResultSetID,'-Image-1.jpg'),'jpg');
+C = kmeans(X,2);
+figure(1)
+image1 = scatter(Y(:,1),Y(:,2),50,C,'filled');
+saveas(image1,strcat(ResultSetID,'-Image-1.jpg'),'jpg');
 quit force

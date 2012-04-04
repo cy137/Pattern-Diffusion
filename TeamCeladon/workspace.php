@@ -33,10 +33,10 @@
               <li class="nav-header">1.  Gather</li>
               <li navAction="gather" detail="All" class="active"><a href="#">Twitter Data</a></li>
               <li class="nav-header">2.  Parse and Process</li>
-              <!--<li navAction="parseprocess" detail="HITS"><a href="#">HITS</a></li>
-              <li navAction="parseprocess" detail="PageRank"><a href="#">PageRank</a></li>-->
+              <li navAction="parseprocess" detail="HITS"><a href="#">HITS</a></li>
+              <li navAction="parseprocess" detail="PageRank"><a href="#">PageRank</a></li>
               <li navAction="parseprocess" detail="PCA"><a href="#">PCA</a></li>
-              <!--<li navAction="parseprocess" detail="PatternDiffusion"><a href="#">Pattern Diffusion</a></li>-->
+              <li navAction="parseprocess" detail="PatternDiffusion"><a href="#">Pattern Diffusion</a></li>
               <li class="nav-header">3.  Results</li>
               <li class="visualizeresults" navAction="visualizeresults" detail="NumericData" type=""><a href="#">Numeric Data</a></li>
               <li class="visualizeresults" navAction="visualizeresults" detail="Graphs" type=""><a href="#">Graphs</a></li>

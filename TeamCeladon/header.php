@@ -15,7 +15,7 @@
 				<?php
 				session_start();
 				if(isset($_SESSION['userID']))
-					echo "<!--<li><a id='SaveResults' onclick='SaveResultsButton_Click()'>Save Results</a></li>-->
+					echo "<li><a id='SaveResults' onclick='SaveResultsButton_Click()'>Save Results</a></li>
 							<li><a id='LogoutButton' onclick='LogoutButton_Click()'>Logout</a></li>";
 				else
 				echo "<li><a id='loginButton' href='#loginModal' data-toggle='modal' onclick='OpenLoginModal_Click()'>Login</a></li>

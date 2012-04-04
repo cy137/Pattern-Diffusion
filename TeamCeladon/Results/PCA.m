@@ -1,5 +1,7 @@
 function PCA(ResultSetID)
 ProcessedData = importdata(strcat(ResultSetID,'-ProcessedData.txt'),',');
+%fid = fopen('15-Tweets.txt'); 
+%tweets = textscan(fid,'%s','Delimiter','\n');
 X = ProcessedData';
 A = X' * X;
 [V,D] = eig(A);

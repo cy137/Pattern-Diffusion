@@ -9,5 +9,6 @@ $resultSet->id = $dataAssoc["id"];
 $resultSet->parsedData = $dataAssoc["parsedData"];
 $resultSet->query = $dataAssoc["query"];
 $resultSet->rawData = $dataAssoc["rawData"];
+$resultSet->userAdjacencyGraph = $dataAssoc["userAdjacencyGraph"];
 $_SESSION["ResultSet"] = $resultSet;
 ?>

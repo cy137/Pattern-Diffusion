@@ -19,6 +19,16 @@ include("./classes/resultSet.php");
 session_start();
 $resultSet = $_SESSION["ResultSet"];
 
+for($i = 0; $i < sizeof($data); $i++)
+{
+	$currResultSet = $data[$i];
+	for($j = 0; $j < sizeof($currResultSet["results"]); $j++)
+	{
+		$currResult = $currResultSet["results"][$j]["text"];
+		$currResultSet["results"][$j]["text"] = str_replace("\r\n"," ",$currResultSet["results"][$j]["text"]);
+	}
+}
+
 $stopWords = array("a", "about", "above", "after", "again", "against", "all", "am", "an", 
             "and", "any", "are", "aren't", "as", "at", "be", "because", "been", 
             "before", "being", "below", "between", "both", "but", "by", "can't", 
@@ -78,6 +88,9 @@ foreach($topKeys as $key => $value)
 }
 fclose($keysHandle);
 
+$tweets = "./Results/" . $resultSet->id . "-Tweets.txt";
+$handle2 = fopen($tweets,'w');
+
 $filename = "./Results/" . $resultSet->id . "-ProcessedData.txt";
 $handle = fopen($filename, 'w');
 for($i = 0; $i < sizeof($data); $i++)
@@ -86,6 +99,7 @@ for($i = 0; $i < sizeof($data); $i++)
 	for($j = 0; $j < sizeof($currResultSet["results"]); $j++)
 	{
 		$currResult = $currResultSet["results"][$j]["text"];
+		fwrite($handle2,$currResult . "\r\n");
 		$output = "";
 		foreach(array_keys($topKeys) as $key)
 		{
@@ -102,6 +116,7 @@ for($i = 0; $i < sizeof($data); $i++)
 }
 
 fclose($handle);
+fclose($handle2);
 
 $inputDir = "C:\Websites\TeamCeladon\Results";
 $outputDir = "C:\Websites\TeamCeladon\Results";
@@ -109,4 +124,5 @@ $command = "matlab -wait -sd {$inputDir} -r PCA('{$resultSet->id}')";
 exec($command);
 echo("Your data has been successfully processed using the PCA method.");
 
+$_SESSION["ResultSet"] = $resultSet;
 ?>

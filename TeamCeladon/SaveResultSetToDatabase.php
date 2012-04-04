@@ -7,11 +7,18 @@ if(isset($_SESSION["ResultSet"]))
 {
 	$resultSet = $_SESSION["ResultSet"];
 	$mysqli = new mysqli("76.189.182.27:3306","user","tweetmysql","teamceladon");
-	$query = json_encode($resultSet->query);
-	$rawData = json_encode($resultSet->rawData);
-	$userAdjacencyGraph = resultSet->userAdjacencyGraph;
-	$parsedData = $resultSet->parsedData;
-	$processedData = $resultSet->processedData;
-	$mysqli->query("UPDATE Results SET Query = '{$query}', SET RawData = '{$rawData}', SET UserAdjacencyGraph = '{$userAdjacencyGraph}', SET ParsedData = '{$parsedData}', SET ProcessedData = '{$processedData}', SET NumImages = '1' WHERE ID = '{$resultSet->id}'");
+	$query = str_replace("'","''",json_encode($resultSet->query));
+	$rawData = str_replace("'","''",json_encode($resultSet->rawData));
+	$userAdjacencyGraph = str_replace("'","''",json_encode($resultSet->userAdjacencyGraph));
+	$parsedData = str_replace("'","''",json_encode($resultSet->parsedData));
+	$processedData = str_replace("'","''",json_encode($resultSet->processedData));
+	
+	$mysqlQuery = "UPDATE Results SET Query = '{$query}', RawData = '{$rawData}', UserAdjacencyGraph = '{$userAdjacencyGraph}', ParsedData = '{$parsedData}', ProcessedData = '{$processedData}', NumImages = '1' WHERE ID = '{$resultSet->id}'";
+	$mysqli->query($mysqlQuery);
+	echo($mysqlQuery);
+}
+else
+{
+	echo("nope");
 }
 ?>
