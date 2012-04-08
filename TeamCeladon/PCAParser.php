@@ -19,16 +19,6 @@ include("./classes/resultSet.php");
 session_start();
 $resultSet = $_SESSION["ResultSet"];
 
-for($i = 0; $i < sizeof($data); $i++)
-{
-	$currResultSet = $data[$i];
-	for($j = 0; $j < sizeof($currResultSet["results"]); $j++)
-	{
-		$currResult = $currResultSet["results"][$j]["text"];
-		$currResultSet["results"][$j]["text"] = str_replace("\r\n"," ",$currResultSet["results"][$j]["text"]);
-	}
-}
-
 $stopWords = array("a", "about", "above", "after", "again", "against", "all", "am", "an", 
             "and", "any", "are", "aren't", "as", "at", "be", "because", "been", 
             "before", "being", "below", "between", "both", "but", "by", "can't", 
@@ -52,6 +42,15 @@ $stopWords = array("a", "about", "above", "after", "again", "against", "all", "a
             "yourself", "yourselves");
 			
 $data = $resultSet->rawData;
+
+for($i = 0; $i < sizeof($data); $i++)
+{
+	for($j = 0; $j < sizeof($data[$i]["results"]); $j++)
+	{
+		$data[$i]["results"][$j]["text"] = trim(str_replace("<br />"," ",nl2br($data[$i]["results"][$j]["text"],true)));
+		$data[$i]["results"][$j]["text"] = preg_replace( '/\s+/', ' ', $data[$i]["results"][$j]["text"] );
+	}
+}
 
 $keyCounts = array();
 for($i = 0; $i < sizeof($data); $i++)
@@ -99,19 +98,23 @@ for($i = 0; $i < sizeof($data); $i++)
 	for($j = 0; $j < sizeof($currResultSet["results"]); $j++)
 	{
 		$currResult = $currResultSet["results"][$j]["text"];
-		fwrite($handle2,$currResult . "\r\n");
-		$output = "";
-		foreach(array_keys($topKeys) as $key)
+		if($currResult != "")
 		{
-			if(stristr($key,"HASHTAG"))
-				$output .= (string)(substr_count(strtolower($currResult),$key)+3);
-			else
-				$output .= (string)(substr_count(strtolower($currResult),$key));
-			$output .= ",";
+			fwrite($handle2,$currResult . "\r\n");
+		
+			$output = "";
+			foreach(array_keys($topKeys) as $key)
+			{
+				if(stristr($key,"HASHTAG"))
+					$output .= (string)(substr_count(strtolower($currResult),$key)+3);
+				else
+					$output .= (string)(substr_count(strtolower($currResult),$key));
+				$output .= ",";
+			}
+			$output = substr($output,0,-1);
+			$output .= "\r\n";
+			fwrite($handle,$output);
 		}
-		$output = substr($output,0,-1);
-		$output .= "\r\n";
-		fwrite($handle,$output);
 	}
 }
 

@@ -43,6 +43,15 @@ $stopWords = array("a", "about", "above", "after", "again", "against", "all", "a
 			
 $data = $resultSet->rawData;
 
+for($i = 0; $i < sizeof($data); $i++)
+{
+	for($j = 0; $j < sizeof($data[$i]["results"]); $j++)
+	{
+		$data[$i]["results"][$j]["text"] = trim(str_replace("<br />"," ",nl2br($data[$i]["results"][$j]["text"],true)));
+		$data[$i]["results"][$j]["text"] = preg_replace( '/\s+/', ' ', $data[$i]["results"][$j]["text"] );
+	}
+}
+
 $keyCounts = array();
 for($i = 0; $i < sizeof($data); $i++)
 {

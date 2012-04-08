@@ -26,12 +26,15 @@ foreach($adjList as $key => $value)
 	{
 		if(array_key_exists($value2,$positionArray))
 		{
-			$pos = $positionArray[$value2];
-			$directedGraph[$pos] = 1;
+			$row = $positionArray[$key];
+			$col = $positionArray[$value2];
+			$directedGraph[$row][$col] = 1;
 		}
 	}
 }
 
+$filename = "./Results/" . $resultSet->id . "-UserAdjacencyGraph.txt";
+$handle = fopen($filename, 'w');
 foreach($directedGraph as $key => $value)
 {
 	$output = "";
@@ -40,14 +43,9 @@ foreach($directedGraph as $key => $value)
 		$output .= $value2 . ",";
 	}
 	$output = substr($output,0,-1);
-	echo($output . "<br/>");
+	$output .= "\r\n";
+	fwrite($handle,$output);
 }
-
-for($i = 0; $i < 10; $i++)
-{
-	var_dump($directedGraph[$i]);
-	echo("<br/><br/>");
-}
-
-
+fclose($handle);
+echo("Your data has been successfully processed using the HITS method");
 ?>

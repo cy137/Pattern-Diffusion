@@ -23,9 +23,11 @@
 		$.post("SaveResultSetToDatabase.php",
 			{},
 			function(data){
-				console.log(data);
 				hideProcessingOverlay();
-				}
+			},
+			function(data){
+				hideProcessingOverlay();
+			}
 		);
 	}
 	
@@ -42,9 +44,16 @@
 	
 	function SaveResultSetToSession()
 	{
+		showProcessingOverlay();
 		$.post("SaveResultSetToSession.php",
 		{
 			"data": JSON.stringify(resultSet)
+		},function(data)
+		{
+			hideProcessingOverlay();
+		},function(data)
+		{
+			hideProcessingOverlay();
 		});
 	}
 	

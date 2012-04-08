@@ -31,4 +31,22 @@ if($handle)
 	fclose($handle);
 }
 
+echo("<br/>");
+echo("<h1>Tweets and Categories</h1>");
+$tweetsFilename = "./Results/" . $resultSet->id . "-Tweets.txt";
+$tweetsHandle = fopen($tweetsFilename,'r');
+$tweetsCatFilename = "./Results/" . $resultSet->id . "-PCATweetCategories.txt";
+$tweetsCatHandle = fopen($tweetsCatFilename,'r');
+if($tweetsHandle && $tweetsCatHandle)
+{
+	while(!feof($tweetsHandle) && !feof($tweetsCatHandle))
+	{
+		$tweet = fgets($tweetsHandle);
+		$category = fgets($tweetsCatHandle);
+		echo("{$category}-  {$tweet}<br/>");
+	}
+}
+
+
+
 ?>

@@ -133,8 +133,8 @@ function SubmitQuery()
 		}
 		$.when.apply($,def).done(function(){
 			resultSet.rawData = returnedData.slice(0);
-			SaveResultSetToSession();
 			GetUserAdjacencyGraph();
+			SaveResultSetToSession();
 			hideProcessingOverlay();
 		});
 	});
