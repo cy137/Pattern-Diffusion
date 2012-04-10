@@ -47,5 +47,11 @@ foreach($directedGraph as $key => $value)
 	fwrite($handle,$output);
 }
 fclose($handle);
+
+$inputDir = "C:\Websites\TeamCeladon\Results";
+$outputDir = "C:\Websites\TeamCeladon\Results";
+$command = "matlab -wait -sd {$inputDir} -r HITS('{$resultSet->id}')";
+exec($command);
+
 echo("Your data has been successfully processed using the HITS method");
 ?>

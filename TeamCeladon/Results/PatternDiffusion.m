@@ -21,8 +21,21 @@ else
 end;
 Y = U(:,2:d+1);
 C = kmeans(X,2);
+C2 = kmeans(Y,2);
 dlmwrite(strcat(ResultSetID,'-PatternDiffusionTweetCategories.txt'),C,'\n');
 figure(1)
 image1 = scatter(Y(:,1),Y(:,2),50,C,'filled');
 saveas(image1,strcat(ResultSetID,'-Image-1.jpg'),'jpg');
+
+figure(2)
+image1 = scatter3(Y(:,1),Y(:,2),Y(:,3),50,C,'filled');
+saveas(image1,strcat(ResultSetID,'-Image-2.jpg'),'jpg');
+
+figure(3)
+image3 = scatter(Y(:,1),Y(:,2),50,C2,'filled');
+saveas(image3,strcat(ResultSetID,'-Image-3.jpg'),'jpg');
+
+figure(3)
+image4 = scatter3(Y(:,1),Y(:,2),Y(:,3),50,C2,'filled');
+saveas(image4,strcat(ResultSetID,'-Image-4.jpg'),'jpg');
 quit force

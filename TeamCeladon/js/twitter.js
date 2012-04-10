@@ -30,7 +30,7 @@ function CreateUserAdjacencyGraphCallback(userID)
 var uagDef;
 function GetUserAdjacencyGraph()
 {
-	var sampleSize = 40;
+	var sampleSize = 100;
 	resultSet.userAdjacencyGraph = {};
 	uagDef = new Array();
 	for(var i = 0; i < sampleSize; i++){
